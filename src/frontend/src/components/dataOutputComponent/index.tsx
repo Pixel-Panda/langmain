@@ -3,6 +3,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-balham.css"; // Optional Theme applied to the grid
 import { extractColumnsFromRows } from "../../utils/utils";
 import TableComponent from "../tableComponent";
+import { useTranslation } from "react-i18next";
 
 function DataOutputComponent({
   pagination,
@@ -13,6 +14,7 @@ function DataOutputComponent({
   rows: any[];
   columnMode?: "intersection" | "union";
 }) {
+  const { t } = useTranslation();
   // If the rows are not an array of objects, convert them to an array of objects
   if (rows.some((row) => typeof row !== "object")) {
     rows = rows.map((row) => ({ data: row }));
@@ -29,7 +31,7 @@ function DataOutputComponent({
     <TableComponent
       autoSizeStrategy={{ type: "fitGridWidth", defaultMinWidth: 100 }}
       key={"dataOutputComponent"}
-      overlayNoRowsTemplate="No data available"
+      overlayNoRowsTemplate={t("No data available")}
       suppressRowClickSelection={true}
       pagination={pagination}
       columnDefs={columnDefs}

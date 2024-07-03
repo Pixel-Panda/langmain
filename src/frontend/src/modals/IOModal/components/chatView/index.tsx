@@ -17,6 +17,7 @@ import { classNames } from "../../../../utils/utils";
 import ChatInput from "./chatInput";
 import useDragAndDrop from "./chatInput/hooks/use-drag-and-drop";
 import ChatMessage from "./chatMessage";
+import { useTranslation } from "react-i18next";
 
 export default function ChatView({
   sendMessage,
@@ -25,6 +26,8 @@ export default function ChatView({
   lockChat,
   setLockChat,
 }: chatViewProps): JSX.Element {
+  const { t } = useTranslation();
+
   const { flowPool, outputs, inputs, CleanFlowPool } = useFlowStore();
   const { setErrorData } = useAlertStore();
   const currentFlowId = useFlowsManagerStore((state) => state.currentFlowId);
@@ -88,8 +91,8 @@ export default function ChatView({
           console.error(e);
           return {
             isSend: false,
-            message: "Error parsing message",
-            sender_name: "Error",
+            message: t("Error parsing message"),
+            sender_name: t("Error"),
             componentId: output.id,
           };
         }
@@ -195,19 +198,19 @@ export default function ChatView({
           ) : (
             <div className="chat-alert-box">
               <span>
-                👋 <span className="langflow-chat-span">Langflow Chat</span>
+                👋 <span className="langflow-chat-span">{t("Langflow Chat")}</span>
               </span>
               <br />
               <div className="langflow-chat-desc">
                 <span className="langflow-chat-desc-span">
-                  {CHAT_FIRST_INITIAL_TEXT}{" "}
+                  {t(CHAT_FIRST_INITIAL_TEXT)}{" "}
                   <span>
                     <IconComponent
                       name="MessageSquareMore"
                       className="mx-1 inline h-5 w-5 animate-bounce"
                     />
                   </span>{" "}
-                  {CHAT_SECOND_INITIAL_TEXT}
+                  {t(CHAT_SECOND_INITIAL_TEXT)}
                 </span>
               </div>
             </div>

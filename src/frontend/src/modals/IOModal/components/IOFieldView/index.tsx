@@ -19,6 +19,7 @@ import IOFileInput from "./components/FileInput";
 import IoJsonInput from "./components/JSONInput";
 import CsvSelect from "./components/csvSelect";
 import IOKeyPairInput from "./components/keyPairInput";
+import { useTranslation } from "react-i18next";
 
 export default function IOFieldView({
   type,
@@ -26,6 +27,8 @@ export default function IOFieldView({
   fieldId,
   left,
 }: IOFieldViewProps): JSX.Element | undefined {
+  const { t } = useTranslation();
+
   const nodes = useFlowStore((state) => state.nodes);
   const setNode = useFlowStore((state) => state.setNode);
   const flowPool = useFlowStore((state) => state.flowPool);
@@ -50,7 +53,7 @@ export default function IOFieldView({
       .results.text ?? "";
 
   function handleOutputType() {
-    if (!node) return <>"No node found!"</>;
+    if (!node) return <>{t("No node found!")}</>;
     switch (type) {
       case InputOutput.INPUT:
         switch (fieldType) {
@@ -60,7 +63,7 @@ export default function IOFieldView({
                 className={`w-full custom-scroll ${
                   left ? "min-h-32" : "h-full"
                 }`}
-                placeholder={"Enter text..."}
+                placeholder={t("Enter text...")}
                 value={node.data.node!.template["input_value"].value}
                 onChange={(e) => {
                   e.target.value;
@@ -144,7 +147,7 @@ export default function IOFieldView({
                 className={`w-full custom-scroll ${
                   left ? "min-h-32" : "h-full"
                 }`}
-                placeholder={"Enter text..."}
+                placeholder={t("Enter text...")}
                 value={node.data.node!.template["input_value"]}
                 onChange={(e) => {
                   e.target.value;
@@ -164,7 +167,7 @@ export default function IOFieldView({
             return <TextOutputView left={left} value={textOutputValue} />;
           case "PDFOutput":
             return left ? (
-              <div>{PDFViewConstant}</div>
+              <div>{t(PDFViewConstant)}</div>
             ) : (
               <PdfViewer pdf={flowPoolNode?.params ?? ""} />
             );
@@ -183,7 +186,7 @@ export default function IOFieldView({
             );
           case "ImageOutput":
             return left ? (
-              <div>Expand the view to see the image</div>
+              <div>{t("Expand the view to see the image")}</div>
             ) : (
               <ImageViewer
                 image={
@@ -268,7 +271,7 @@ export default function IOFieldView({
                 className={`w-full custom-scroll ${
                   left ? "min-h-32" : "h-full"
                 }`}
-                placeholder={"Empty"}
+                placeholder={t("Empty")}
                 // update to real value on flowPool
                 value={
                   (flowPool[node.id] ?? [])[

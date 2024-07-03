@@ -28,6 +28,7 @@ import getTabsOrder from "./utils/get-tabs-order";
 import { getValue } from "./utils/get-value";
 import getWidgetCode from "./utils/get-widget-code";
 import { createTabsArray } from "./utils/tabs-array";
+import { useTranslation } from "react-i18next";
 
 const ApiModal = forwardRef(
   (
@@ -44,6 +45,7 @@ const ApiModal = forwardRef(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
     const tweaksCode = buildTweaks(flow);
     const tweak = useTweaksStore((state) => state.tweak);
     const addTweaks = useTweaksStore((state) => state.setTweak);
@@ -240,7 +242,7 @@ const ApiModal = forwardRef(
     return (
       <BaseModal open={open} setOpen={setOpen}>
         <BaseModal.Trigger asChild>{children}</BaseModal.Trigger>
-        <BaseModal.Header description={EXPORT_CODE_DIALOG}>
+        <BaseModal.Header description={t(EXPORT_CODE_DIALOG)}>
           <span className="pr-2">API</span>
           <IconComponent
             name="Code2"

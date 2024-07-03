@@ -9,17 +9,18 @@ import {
   nodeNames,
 } from "../../../../utils/styleUtils";
 import { classNames } from "../../../../utils/utils";
+import { useTranslation } from "react-i18next";
 
 const TooltipRenderComponent = ({ item, index, left }) => {
   const Icon = nodeIconsLucide[item.family] ?? nodeIconsLucide["unknown"];
-
+  const { t } = useTranslation();
   return (
     <div
       key={index}
       data-testid={`available-${left ? "input" : "output"}-${item.family}`}
     >
       {index === 0 && (
-        <span>{left ? INPUT_HANDLER_HOVER : OUTPUT_HANDLER_HOVER}</span>
+        <span>{left ? t(INPUT_HANDLER_HOVER) : t(OUTPUT_HANDLER_HOVER)}</span>
       )}
       <span
         key={index}
@@ -45,7 +46,7 @@ const TooltipRenderComponent = ({ item, index, left }) => {
           className="ps-2 text-xs text-foreground"
           data-testid={`tooltip-${nodeNames[item.family] ?? "Other"}`}
         >
-          {nodeNames[item.family] ?? "Other"}{" "}
+          {t(nodeNames[item.family] ?? "Other")}{" "}
           {item?.display_name && item?.display_name?.length > 0 ? (
             <span
               className="text-xs"
@@ -53,33 +54,33 @@ const TooltipRenderComponent = ({ item, index, left }) => {
             >
               {" "}
               {item.display_name === "" ? "" : " - "}
-              {item.display_name.split(", ").length > 2
+              {item.display_name.split(", ").length >= 2
                 ? item.display_name.split(", ").map((el, index) => (
                     <React.Fragment key={el + name}>
                       <span>
                         {index === item.display_name.split(", ").length - 1
-                          ? el
-                          : (el += `, `)}
+                          ? t(el)
+                          : (el = t(el) + `, `)}
                       </span>
                     </React.Fragment>
                   ))
-                : item.display_name}
+                : t(item.display_name)}
             </span>
           ) : (
             <span className="text-xs" data-testid={`tooltip-${item?.type}`}>
               {" "}
               {item.type === "" ? "" : " - "}
-              {item.type.split(", ").length > 2
+              {item.type.split(", ").length >= 2
                 ? item.type.split(", ").map((el, index) => (
                     <React.Fragment key={el + name}>
                       <span>
                         {index === item.type.split(", ").length - 1
-                          ? el
-                          : (el += `, `)}
+                          ? t(el)
+                          : (el = t(el) + `, `)}
                       </span>
                     </React.Fragment>
                   ))
-                : item.type}
+                : t(item.type) }
             </span>
           )}
         </span>

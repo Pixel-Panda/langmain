@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import TableNodeCellRender from "../../../components/tableComponent/components/tableNodeCellRender";
 import TableToggleCellRender from "../../../components/tableComponent/components/tableToggleCellRender";
 import { NodeDataType } from "../../../types/flow";
+import { useTranslation } from "react-i18next";
 
 const useColumnDefs = (
   myData: NodeDataType,
@@ -10,17 +11,18 @@ const useColumnDefs = (
   changeAdvanced: (n: string) => void,
   open: boolean,
 ) => {
+  const { t } = useTranslation();
   const columnDefs: ColDef[] = useMemo(
     () => [
       {
-        headerName: "Field Name",
+        headerName: t("Field Name"),
         field: "display_name",
         valueGetter: (params) => {
           const templateParam = params.data;
           return (
             (templateParam.display_name
-              ? templateParam.display_name
-              : templateParam.name) ?? params.data.key
+              ? t(templateParam.display_name)
+              : t(templateParam.name)) ?? params.data.key
           );
         },
         wrapText: true,
@@ -30,9 +32,16 @@ const useColumnDefs = (
         cellClass: "no-border",
       },
       {
-        headerName: "Description",
+        headerName: t("Description"),
         field: "info",
-        tooltipField: "info",
+        valueGetter: (params) => {
+          const templateParam = params.data;
+          return templateParam.info ? t(templateParam.info) : "";
+        },
+        tooltipValueGetter: (params) => {
+          const templateParam = params.data;
+          return templateParam.info ? t(templateParam.info) : "";
+        },
         wrapText: true,
         autoHeight: true,
         flex: 2,
@@ -40,7 +49,7 @@ const useColumnDefs = (
         cellClass: "no-border",
       },
       {
-        headerName: "Value",
+        headerName: t("Value"),
         field: "value",
         cellRenderer: TableNodeCellRender,
         valueGetter: (params: ValueGetterParams) => {
@@ -57,7 +66,7 @@ const useColumnDefs = (
         cellClass: "no-border",
       },
       {
-        headerName: "Show",
+        headerName: t("Show"),
         field: "advanced",
         cellRenderer: TableToggleCellRender,
         valueGetter: (params: ValueGetterParams) => {

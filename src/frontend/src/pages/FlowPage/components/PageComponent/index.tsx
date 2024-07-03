@@ -47,6 +47,7 @@ import ConnectionLineComponent from "../ConnectionLineComponent";
 import SelectionMenu from "../SelectionMenuComponent";
 import getRandomName from "./utils/get-random-name";
 import isWrappedWithClass from "./utils/is-wrapped-with-class";
+import { useTranslation } from "react-i18next";
 
 const nodeTypes = {
   genericNode: GenericNode,
@@ -59,6 +60,7 @@ export default function Page({
   flow: FlowType;
   view?: boolean;
 }): JSX.Element {
+  const { t } = useTranslation();
   const uploadFlow = useFlowsManagerStore((state) => state.uploadFlow);
   const autoSaveCurrentFlow = useFlowsManagerStore(
     (state) => state.autoSaveCurrentFlow,
@@ -143,7 +145,7 @@ export default function Page({
       // ]);
     } else {
       setErrorData({
-        title: INVALID_SELECTION_ERROR_ALERT,
+        title: t(INVALID_SELECTION_ERROR_ALERT),
         list: validateSelection(lastSelection!, edges),
       });
     }
@@ -176,7 +178,7 @@ export default function Page({
     if (checkOldComponents({ nodes: flow?.data?.nodes ?? [] })) {
       setNoticeData({
         title:
-          "Components created before Langflow 1.0 may be unstable. Ensure components are up to date.",
+          t("Components created before Langflow 1.0 may be unstable. Ensure components are up to date."),
       });
     }
   }, []);
@@ -363,6 +365,10 @@ export default function Page({
         );
 
         const newId = getNodeId(data.type);
+        if (data.node) {
+          data.node.display_name = t(data.node.display_name);
+          data.node.description = t(data.node.description);
+        }
 
         const newNode: NodeType = {
           id: newId,
@@ -391,14 +397,14 @@ export default function Page({
             position: position,
           }).catch((error) => {
             setErrorData({
-              title: UPLOAD_ERROR_ALERT,
+              title: t(UPLOAD_ERROR_ALERT),
               list: [error],
             });
           });
         } else {
           setErrorData({
-            title: WRONG_FILE_ERROR_ALERT,
-            list: [UPLOAD_ALERT_LIST],
+            title: t(WRONG_FILE_ERROR_ALERT),
+            list: [t(UPLOAD_ALERT_LIST)],
           });
         }
       }

@@ -18,6 +18,7 @@ import useAutoResizeTextArea from "./hooks/use-auto-resize-text-area";
 import useFocusOnUnlock from "./hooks/use-focus-unlock";
 import useHandleFileChange from "./hooks/use-handle-file-change";
 import useUpload from "./hooks/use-upload";
+
 export default function ChatInput({
   lockChat,
   chatValue,

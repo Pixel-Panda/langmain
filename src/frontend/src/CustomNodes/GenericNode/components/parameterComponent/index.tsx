@@ -53,6 +53,7 @@ import OutputComponent from "../OutputComponent";
 import HandleRenderComponent from "../handleRenderComponent";
 import OutputModal from "../outputModal";
 import { TEXT_FIELD_TYPES } from "./constants";
+import { useTranslation } from "react-i18next";
 
 export default function ParameterComponent({
   left,
@@ -73,6 +74,7 @@ export default function ParameterComponent({
   selected,
   outputProxy,
 }: ParameterComponentType): JSX.Element {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const infoHtml = useRef<HTMLDivElement & ReactNode>(null);
   const nodes = useFlowStore((state) => state.nodes);
@@ -188,7 +190,7 @@ export default function ParameterComponent({
     // @ts-ignore
     infoHtml.current = (
       <div className="h-full w-full break-words">
-        {info.split("\n").map((line, index) => (
+        {t(info).split("\n").map((line, index) => (
           <p key={index} className="block">
             {line}
           </p>
@@ -210,10 +212,10 @@ export default function ParameterComponent({
         }
         nodeId={data.id}
         frozen={data.node?.frozen}
-        name={title ?? type}
+        name={t(title) ?? type}
       />
     ) : (
-      <span>{title}</span>
+      <span>{t(title)}</span>
     );
   }
 
@@ -325,9 +327,9 @@ export default function ParameterComponent({
                   content={
                     displayOutputPreview
                       ? unknownOutput
-                        ? "Output can't be displayed"
-                        : "Inspect Output"
-                      : "Please build the component first"
+                        ? t("Output can't be displayed")
+                        : t("Inspect Output")
+                      : t("Please build the component first")
                   }
                 >
                   <Button

@@ -9,6 +9,7 @@ import { NodeDataType } from "../../types/flow";
 import BaseModal from "../baseModal";
 import useColumnDefs from "./hooks/use-column-defs";
 import useRowData from "./hooks/use-row-data";
+import { useTranslation } from "react-i18next";
 
 const EditNodeModal = forwardRef(
   (
@@ -25,6 +26,8 @@ const EditNodeModal = forwardRef(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
+
     const myData = useRef(cloneDeep(data));
 
     const isDark = useDarkStore((state) => state.dark);
@@ -94,7 +97,7 @@ const EditNodeModal = forwardRef(
 
         <BaseModal.Footer
           submit={{
-            label: "Save Changes",
+            label: t("Save Changes"),
             onClick: () => {
               setNode(data.id, (old) => ({
                 ...old,

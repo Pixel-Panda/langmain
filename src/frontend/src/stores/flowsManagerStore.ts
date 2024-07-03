@@ -32,6 +32,7 @@ import useFlowStore from "./flowStore";
 import { useFolderStore } from "./foldersStore";
 import { useGlobalVariablesStore } from "./globalVariablesStore/globalVariables";
 import { useTypesStore } from "./typesStore";
+import { getI18n } from "react-i18next";
 
 let saveTimeoutId: NodeJS.Timeout | null = null;
 
@@ -80,6 +81,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
   isLoading: true,
   setIsLoading: (isLoading: boolean) => set({ isLoading }),
   refreshFlows: () => {
+    const { t } = getI18n();
     return new Promise<void>((resolve, reject) => {
       set({ isLoading: true });
 
@@ -113,7 +115,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
         .catch((e) => {
           set({ isLoading: false });
           useAlertStore.getState().setErrorData({
-            title: "Could not load flows from database",
+            title: t("Could not load flows from database"),
           });
           reject(e);
         });
@@ -133,6 +135,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
   },
   saveFlowDebounce: pDebounce((flow: FlowType, silent?: boolean) => {
     set({ saveLoading: true });
+    const { t } = getI18n();
     return new Promise<void>((resolve, reject) => {
       updateFlowInDatabase(flow)
         .then((updatedFlow) => {
@@ -141,7 +144,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
             if (!silent) {
               useAlertStore
                 .getState()
-                .setSuccessData({ title: "Changes saved successfully" });
+                .setSuccessData({ title: t("Changes saved successfully") });
             }
             get().setFlows(
               get().flows.map((flow) => {
@@ -159,7 +162,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
         })
         .catch((err) => {
           useAlertStore.getState().setErrorData({
-            title: "Error while saving changes",
+            title: t("Error while saving changes"),
             list: [(err as AxiosError).message],
           });
           reject(err);
@@ -202,6 +205,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
     position?: XYPosition,
     fromDragAndDrop?: boolean,
   ): Promise<string | undefined> => {
+    const { t } = getI18n();
     let flowData = flow
       ? processDataFromFlow(flow)
       : { nodes: [], edges: [], viewport: { zoom: 1, x: 0, y: 0 } };
@@ -276,14 +280,14 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
       } catch (error: any) {
         if (error.response?.data?.detail) {
           useAlertStore.getState().setErrorData({
-            title: "Could not load flows from database",
+            title: t("Could not load flows from database"),
             list: [error.response?.data?.detail],
           });
         } else {
           useAlertStore.getState().setErrorData({
-            title: "Could not load flows from database",
+            title: t("Could not load flows from database"),
             list: [
-              error.message ?? "An unexpected error occurred, please try again",
+              error.message ?? t("An unexpected error occurred, please try again"),
             ],
           });
         }
@@ -369,6 +373,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
     isComponent: boolean | null;
     position?: XYPosition;
   }): Promise<string | never> => {
+    const { t } = getI18n();
     return new Promise(async (resolve, reject) => {
       let id;
       if (file) {
@@ -381,7 +386,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
             (fileData.is_component !== undefined &&
               fileData.is_component !== isComponent))
         ) {
-          reject("You cannot upload a component as a flow or vice versa");
+          reject(t("You cannot upload a component as a flow or vice versa"));
         } else {
           if (fileData.flows) {
             fileData.flows.forEach((flow: FlowType) => {
@@ -418,7 +423,7 @@ const useFlowsManagerStore = create<FlowsManagerStoreType>((set, get) => ({
               (fileData.is_component !== undefined &&
                 fileData.is_component !== isComponent)
             ) {
-              reject("You cannot upload a component as a flow or vice versa");
+              reject(t("You cannot upload a component as a flow or vice versa"));
             } else {
               id = await get().addFlow(newProject, fileData);
               resolve(id);
